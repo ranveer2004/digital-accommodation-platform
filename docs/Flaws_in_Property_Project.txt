@@ -1,0 +1,45 @@
+Flaws in Property Project
+
+1. 
+user old device specific token remains in mongo collection if not logged out and jwt expires
+
+2.
+	No Email verificatuion while creating new account
+
+	Can be solved : 
+	As done in Forgot Password OTP verification (not a big deal)
+
+3.
+	Access Token is being used untill expired even after logout
+
+	Can be solved : 
+	using separate database for tokens, which keep track of active-live tokens,
+	and during token invalidation, simply remove token from the database.
+
+
+4.
+Complete project is synchronous (blocking) because of spring-web.
+	Spring-Web (Tomcat server) use 1 thread for 1 request :: 
+		Which mean that thread will be blocked until the request gets completed.
+		If thread-pool is having 100 threads, then it can only handle 100 concurrent request only,
+			beyond 100 request, either the request will be delayed of the request get rejected.
+
+	Can be solved : 
+	use Spring-Webflux (Netty server) uses Event-loop model :: 
+		Some threads are dedicated to intercept incoming request, some are dedciated to work in background and get data from Database.
+
+
+...
+
+
+
+
+
+
+
+AuthenticationManager (interface) :: 
+	ProviderManager
+AuthenticationProvider (interface) ::
+	DaoAuthenticationProvider
+	JwtAuthenticationProvider
+	OAuthAuthenticationProvider
